@@ -24,7 +24,6 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 ENV LC_CTYPE en_US.UTF-8
 ENV LC_MESSAGES en_US.UTF-8
-
 RUN set -ex \
     && buildDeps=' \
         freetds-dev \
@@ -37,6 +36,7 @@ RUN set -ex \
     ' \
     && apt-get update -yqq \
     && apt-get upgrade -yqq \
+    && apt-get install -yqq tdsodbc unixodbc-dev \
     && apt-get install -yqq --no-install-recommends \
         $buildDeps \
         freetds-bin \
@@ -70,7 +70,7 @@ RUN set -ex \
         /usr/share/man \
         /usr/share/doc \
         /usr/share/doc-base
-
+ADD odbcinst.ini /etc/odbcinst.ini
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
 
